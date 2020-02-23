@@ -80,6 +80,10 @@
       <DependentUpon>GUI.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="GUIApp.Designer.vb">
+      <DependentUpon>GUIApp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="GUIApp.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
