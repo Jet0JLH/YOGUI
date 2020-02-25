@@ -2,11 +2,15 @@
     'Attributs
     Private _name As String
     Private _filePath As String
+    Private _group As String
+    Private _category As String
 
     'Events
     Public Event nameChange(ByRef sender As App, ByVal oldVal As String, ByVal newVal As String)
     Public Event filePathChange(ByRef sender As App, ByVal oldVal As String, ByVal newVal As String)
     Public Event executionStarts(ByRef sender As App, ByVal index As Byte)
+    Public Event groupChange(ByRef sender As App, ByVal oldVal As String, ByVal newVal As String)
+    Public Event categoryChange(ByRef sender As App, ByVal oldVal As String, ByVal newVal As String)
 
     'Errors
     Public Class InvalidFileName
@@ -48,6 +52,30 @@
             If oldVal <> value Then
                 _filePath = value
                 RaiseEvent filePathChange(Me, oldVal, value)
+            End If
+        End Set
+    End Property
+    Public Property Group As String
+        Get
+            Return _group
+        End Get
+        Set(value As String)
+            Dim oldVal As String = _filePath
+            If oldVal <> value Then
+                _group = value
+                RaiseEvent groupChange(Me, oldVal, value)
+            End If
+        End Set
+    End Property
+    Public Property Category As String
+        Get
+            Return _category
+        End Get
+        Set(value As String)
+            Dim oldVal As String = _filePath
+            If oldVal <> value Then
+                _category = value
+                RaiseEvent categoryChange(Me, oldVal, value)
             End If
         End Set
     End Property
