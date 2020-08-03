@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.vb" />
+    <Compile Include="ConfigVault.vb" />
     <Compile Include="GUI.vb">
       <SubType>Form</SubType>
     </Compile>
