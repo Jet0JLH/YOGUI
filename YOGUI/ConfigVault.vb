@@ -125,6 +125,25 @@
         End If
         Return tempList
     End Function
+    Public Sub ImportConfig(ByVal path As String, ByVal origin As Origins)
+        Try
+            Dim plainFile As String = My.Computer.FileSystem.ReadAllText(path)
+            plainFile = plainFile.Replace(Chr(10), "").Replace(Chr(13), "") 'Entferne Zeilenumbrüche
+            For Each line As String In plainFile.Split(";") 'Zerlege plainFile in einzelne Zeilen durch Standort des Semikolons
+                If line <> "" And line.Contains("|") Then 'Prüfe ob Zeile soweit logisch vollständig ist
+                    Dim list As New List(Of String)
+                    For Each item In line.Split("|")
+                        list.Add(item)
+                    Next
+                    If list.Count >= 2 Then
+                        Me.setConfig(New Config(list(0), list(1), origin))
+                    End If
+                End If
+            Next
+        Catch ex As Exception
+            MsgBox(ex.ToString, MsgBoxStyle.Critical)
+        End Try
+    End Sub
 End Class
 Public Class ConfigSet
     Public Event ValueChanged(ByRef sender As ConfigSet, ByVal Name As String, ByVal oldValue As String, ByVal newValue As String)

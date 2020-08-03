@@ -23,6 +23,7 @@
     Private Sub GUI_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         connectHandler()
         createDefaultConfig()
+        LoadConfigs()
     End Sub
 
     Public Sub createDefaultConfig()
@@ -32,6 +33,10 @@
         globalConfig.setConfig(New Config("main.form.backimage", "", Origins.DefaultValue))
         globalConfig.setConfig(New Config("main.form.tabs.alignment", "top", Origins.DefaultValue))
         globalConfig.setConfig(New Config("main.form.tabs.multiline", "false", Origins.DefaultValue))
+        globalConfig.setConfig(New Config("config.domain", "settings\domainSettings.conf", Origins.DefaultValue))
+        globalConfig.setConfig(New Config("config.computer", "", Origins.DefaultValue))
+        globalConfig.setConfig(New Config("config.group", "", Origins.DefaultValue))
+        globalConfig.setConfig(New Config("config.user", "", Origins.DefaultValue))
     End Sub
 
     Public Function getTabTemplate(ByVal name As String) As TabPage
@@ -68,6 +73,25 @@
         Err = 3
         Critical = 4
     End Enum
+
+    Private Sub LoadConfigs()
+        For Each item As ConfigSet In globalConfig.getConfigs("config.*")
+            If My.Computer.FileSystem.FileExists(item.Value) Then
+                Select Case item.Name
+                    Case "config.domain"
+                        globalConfig.ImportConfig(item.Value, Origins.Domain)
+                    Case "config.computer"
+                        globalConfig.ImportConfig(item.Value, Origins.Computer)
+                    Case "config.group"
+                        globalConfig.ImportConfig(item.Value, Origins.Group)
+                    Case "config.user"
+                        globalConfig.ImportConfig(item.Value, Origins.User)
+                End Select
+            Else
+                debugging("Configfile dosen't exist! " & vbCrLf & vbTab & item.Name & ": " & item.Value, Loglevel.Warning)
+            End If
+        Next
+    End Sub
 
 #Region "Handler"
     Private Sub connectHandler()
