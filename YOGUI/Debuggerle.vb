@@ -17,5 +17,7 @@ Public Class Debuggerle
 
     Private Sub Debuggerle_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Timer1.Stop()
+        e.Cancel = True
+        Me.Hide()
     End Sub
 End Class
