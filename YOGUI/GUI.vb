@@ -24,6 +24,7 @@
         connectHandler()
         createDefaultConfig()
         LoadConfigs()
+        loadTabs()
     End Sub
 
     Public Sub createDefaultConfig()
@@ -39,14 +40,27 @@
         globalConfig.setConfig(New Config("config.user", "", Origins.DefaultValue))
     End Sub
 
-    Public Function getTabTemplate(ByVal name As String) As TabPage
-        Dim tabTemplate As New TabPage(name)
+    Public Function generateTabTemplate(ByRef conf As ConfigSet) As TabPage
+        Dim tabTemplate As New TabPage(conf.Value)
         Dim layoutPanel As New FlowLayoutPanel()
         layoutPanel.Dock = DockStyle.Fill
         layoutPanel.FlowDirection = FlowDirection.TopDown
         tabTemplate.Controls.Add(layoutPanel)
+        tabTemplate.Tag = conf
         Return tabTemplate
     End Function
+
+    Sub loadTabs(Optional removeOldTabs As Boolean = True)
+        If removeOldTabs Then TabControl1.TabPages.Clear()
+        For Each tabItem In globalConfig.getConfigs("tabs.names.*")
+            'Dim tabSettingName As String = tabItem.Name.Substring(11)
+            Dim allreadyExists As Boolean = False
+            For Each page As TabPage In TabControl1.TabPages
+                If page.Tag.Equals(tabItem) Then allreadyExists = True : Exit For
+            Next
+            If allreadyExists = False Then TabControl1.TabPages.Add(generateTabTemplate(tabItem))
+        Next
+    End Sub
 
     Sub debugging(text As String, Optional level As Loglevel = 0)
         Dim timestamp As String = My.Computer.Clock.LocalTime.ToString
